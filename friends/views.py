@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.db.models import Q
 from django.contrib.auth import get_user_model
 
@@ -14,12 +14,17 @@ from .serializers import (SendFriendRequestSerializer, ShowFriendRequestSerializ
 User = get_user_model()
 
 
+def index(request):
+    return HttpResponse("Hello")
+
+
 class SearchUserRequestView(APIView):
     permission_classes = (IsAuthenticated,)
 
     def get(self, request, username):
         users = User.objects.filter(
-            Q(username__contains=username) | Q(username=username)).values('username', 'name', 'profile_picture', 'user_uid')
+            Q(username__contains=username) | Q(username=username)).values('username', 'name', 'profile_picture',
+                                                                          'user_uid')
 
         response_content = {
             'status': True,
@@ -86,7 +91,8 @@ class ShowFriendRequestView(APIView):
             receiver=user, is_active=True)
 
         friend_request_data = list(friend_requests.values(
-            'id', 'sender__user_uid', 'sender__username', 'sender__name', 'sender__about_me', 'sender__profile_picture'))
+            'id', 'sender__user_uid', 'sender__username', 'sender__name', 'sender__about_me',
+            'sender__profile_picture'))
 
         response_content = {
             'status': True,
