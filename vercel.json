@@ -22,7 +22,7 @@
     },
     {
     "src": "/(.*)",
-    "dest": "devntechno/wsgi.py"
+    "dest": "chat_app/wsgi.py"
     }
     ]
     }
